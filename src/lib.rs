@@ -43,6 +43,12 @@ pub mod collision_prophet {
         max_toi: f32,
         target_distance: f32,
     ) -> bool {
+//        print!("Bounding box {}", bounding_box);
+//        print!("Position {}", position);
+//        print!("Velocity {}", velocity);
+//        println!("Obstacles bounding boxes {:?}", obstacle_bounding_boxes);
+//        println!("Obstacles positions {:?}", obstacle_positions);
+//        println!("Obstacles velocities {:?}", obstacle_velocities);
         for index in 0..obstacle_positions.len() {
             let bounding_cube = Cuboid::new(*bounding_box);
             let isometry_position = Isometry3::new(*position, nalgebra::zero());
@@ -63,5 +69,25 @@ pub mod collision_prophet {
             }
         }
         return false;
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use crate::collision_prophet::collides;
+    use nalgebra::Vector3;
+
+    #[test]
+    fn test_straight_movement_collides() {
+        assert_eq!(collides(
+            &Vector3::new(1.0, 1.0, 1.0),
+            &Vector3::new(0.0, 10.0, 0.0),
+            &Vector3::new(1.0, -2.0, 1.0),
+            &[Vector3::new(1.0, 1.0, 1.0)],
+            &[Vector3::new(0.0, 0.0, 0.0)],
+            &[Vector3::new(1.0, -1.0, 1.0)],
+            100.0,
+            100.0,
+        ), true);
     }
 }
